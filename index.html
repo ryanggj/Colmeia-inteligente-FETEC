@@ -1,0 +1,869 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colmeia Inteligente</title>
+
+<style>
+:root {
+  --green: #174b32;
+  --green2: #23764b;
+  --honey: #e9a928;
+  --bg: #f4f6f1;
+  --white: #ffffff;
+  --text: #24352b;
+  --muted: #718078;
+  --red: #dc3434;
+  --yellow: #e8a51d;
+  --border: #e3e9e2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  background: var(--green);
+  color: white;
+  padding: 24px 6%;
+  border-bottom: 5px solid var(--honey);
+}
+
+header h1 {
+  font-size: 27px;
+  margin-bottom: 8px;
+}
+
+header p {
+  color: #dce9df;
+  line-height: 1.5;
+}
+
+.container {
+  width: 92%;
+  max-width: 1200px;
+  margin: 28px auto;
+}
+
+.section-title {
+  margin-bottom: 18px;
+  color: var(--green);
+  font-size: 22px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 3px 10px #00000008;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stat h2 {
+  font-size: 27px;
+  margin-top: 9px;
+  color: var(--green);
+}
+
+.hives {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-bottom: 35px;
+}
+
+.hive {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--green2);
+  box-shadow: 0 3px 12px #00000008;
+}
+
+.hive.warning {
+  border-left-color: var(--yellow);
+}
+
+.hive.danger {
+  border-left-color: var(--red);
+}
+
+.hive h3 {
+  color: var(--green);
+  margin-bottom: 15px;
+}
+
+.temperature {
+  font-size: 35px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+.status {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.status.green {
+  background: #d9f3e2;
+  color: #176b37;
+}
+
+.status.yellow {
+  background: #fff0c7;
+  color: #8c5b00;
+}
+
+.status.red {
+  background: #ffe0e0;
+  color: #a51e1e;
+}
+
+.light {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.light.green { background: #20a653; }
+.light.yellow { background: #edb323; }
+.light.red { background: #e33333; }
+
+.hive p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 8px 0;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: .2s;
+}
+
+button:hover {
+  filter: brightness(.92);
+}
+
+.primary {
+  background: var(--green);
+  color: white;
+}
+
+.secondary {
+  background: #e8efe9;
+  color: var(--green);
+}
+
+.danger-btn {
+  background: #ffe1e1;
+  color: #a51e1e;
+}
+
+.hive button {
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.panel {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 30px;
+  border: 1px solid var(--border);
+}
+
+.panel p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d5ded6;
+  border-radius: 8px;
+  margin-top: 7px;
+  margin-bottom: 15px;
+  background: white;
+  color: var(--text);
+  font: inherit;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--green);
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+th, td {
+  padding: 13px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+th {
+  background: #edf3ed;
+  color: var(--green);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.legend div {
+  background: #f5f8f4;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.legend strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+footer {
+  background: var(--green);
+  color: white;
+  padding: 25px;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 13px;
+}
+
+@media(max-width:600px) {
+  header h1 { font-size: 22px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .full { grid-column: auto; }
+  .panel { padding: 17px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🐝 Colmeia Inteligente</h1>
+  <p>Monitoramento e Gestão de Apiário</p>
+  <p>Uma solução tecnológica para acompanhar a temperatura,
+  organizar inspeções e melhorar o manejo das colmeias.</p>
+</header>
+
+<main class="container">
+
+  <h2 class="section-title">📊 Painel de Monitoramento</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <span>Total de colmeias</span>
+      <h2 id="totalHives">6</h2>
+    </div>
+
+    <div class="stat">
+      <span>Temperatura média</span>
+      <h2 id="average">-- °C</h2>
+    </div>
+
+    <div class="stat">
+      <span>Colmeias em alerta</span>
+      <h2 id="alerts">0</h2>
+    </div>
+
+    <div class="stat">
+      <span>Mel registrado</span>
+      <h2 id="totalHoney">0 L</h2>
+    </div>
+  </div>
+
+  <h2 class="section-title">🍯 Monitoramento das 6 colmeias</h2>
+
+  <div class="hives" id="hives"></div>
+
+  <section class="panel">
+    <h2 class="section-title">🌡️ Simulador de Temperatura</h2>
+    <p>Escolha uma colmeia e altere a temperatura para demonstrar
+    o funcionamento dos indicadores durante a apresentação.</p>
+
+    <label for="simHive">Selecionar colmeia</label>
+    <select id="simHive">
+      <option value="0">Colmeia 01</option>
+      <option value="1">Colmeia 02</option>
+      <option value="2">Colmeia 03</option>
+      <option value="3">Colmeia 04</option>
+      <option value="4">Colmeia 05</option>
+      <option value="5">Colmeia 06</option>
+    </select>
+
+    <label for="simTemp">Nova temperatura (°C)</label>
+    <input type="number" id="simTemp" value="34" min="0" max="80" step="0.1">
+
+    <button class="primary" onclick="simulateTemperature()">
+      Atualizar temperatura
+    </button>
+  </section>
+
+  <section class="panel" id="inspection">
+    <h2 class="section-title">📝 Registrar Inspeção Real</h2>
+    <p>Após visitar uma colmeia física, preencha os dados abaixo
+    para manter o histórico atualizado.</p>
+
+    <form id="inspectionForm">
+
+      <div class="form-grid">
+
+        <div>
+          <label for="hiveSelect">Colmeia inspecionada</label>
+          <select id="hiveSelect" required>
+            <option value="0">Colmeia 01</option>
+            <option value="1">Colmeia 02</option>
+            <option value="2">Colmeia 03</option>
+            <option value="3">Colmeia 04</option>
+            <option value="4">Colmeia 05</option>
+            <option value="5">Colmeia 06</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="inspectionDate">Data e hora</label>
+          <input type="datetime-local" id="inspectionDate" required>
+        </div>
+
+        <div>
+          <label for="realTemp">Temperatura medida (°C)</label>
+          <input type="number" id="realTemp" step="0.1"
+                 min="0" max="80" placeholder="Ex.: 34.5" required>
+        </div>
+
+        <div>
+          <label for="honey">Mel colhido (litros)</label>
+          <input type="number" id="honey" min="0" step="0.1"
+                 value="0" required>
+        </div>
+
+        <div class="full">
+          <label for="condition">Situação interna da colmeia</label>
+          <select id="condition" required>
+            <option value="Abelhas ativas">Abelhas ativas</option>
+            <option value="Necessidade de manejo">Necessidade de manejo</option>
+            <option value="Necessidade de ventilação">Necessidade de ventilação</option>
+            <option value="Colmeia em boas condições">Colmeia em boas condições</option>
+            <option value="Pronta para colheita">Pronta para colheita</option>
+            <option value="Outra situação">Outra situação</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label for="observations">Observações gerais</label>
+          <textarea id="observations"
+            placeholder="Descreva o que foi observado durante a inspeção..."></textarea>
+        </div>
+
+      </div>
+
+      <button type="submit" class="primary">
+        💾 Salvar inspeção
+      </button>
+
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2 class="section-title">📋 Histórico de Inspeções</h2>
+    <p>Registros das visitas realizadas no apiário.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Colmeia</th>
+            <th>Data</th>
+            <th>Temperatura</th>
+            <th>Status</th>
+            <th>Situação</th>
+            <th>Mel (L)</th>
+            <th>Observações</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="history">
+        </tbody>
+      </table>
+    </div>
+
+    <p id="emptyHistory" style="margin-top:15px">
+      Nenhuma inspeção registrada até o momento.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2 class="section-title">📈 Análise Inteligente de Dados</h2>
+    <div id="analysis">
+      <p>Os dados serão analisados conforme as inspeções forem registradas.</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 class="section-title">💡 Guia de Cores e Inspeções</h2>
+
+    <div class="legend">
+      <div>
+        <strong><span class="light green"></span> Verde — Tudo OK</strong>
+        <p>Até 35 °C. Acompanhamento pelo painel.</p>
+      </div>
+
+      <div>
+        <strong><span class="light yellow"></span> Amarelo — Atenção</strong>
+        <p>Acima de 35 °C até 38 °C. Monitorar de perto.</p>
+      </div>
+
+      <div>
+        <strong><span class="light red"></span> Vermelho — Urgente</strong>
+        <p>Acima de 38 °C. Priorizar avaliação física da colmeia.</p>
+      </div>
+    </div>
+
+    <p style="margin-top:20px">
+      <strong>Como funciona:</strong> O sistema utiliza a temperatura
+      registrada para indicar quais colmeias precisam de maior atenção.
+      Assim, o apicultor consegue priorizar o manejo e evitar aberturas
+      desnecessárias, reduzindo o estresse das abelhas.
+    </p>
+
+    <p style="margin-top:12px">
+      <strong>Proposta tátil:</strong> O projeto também pode utilizar
+      identificação por texturas e símbolos para facilitar o reconhecimento
+      dos estados de monitoramento.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <p>🐝 COLMEIA INTELIGENTE — Monitoramento e Gestão de Apiário</p>
+  <p>Projeto de inovação tecnológica na apicultura</p>
+</footer>
+
+<script>
+
+// Dados iniciais das seis colmeias
+const defaultHives = [
+  {temp: 34.2},
+  {temp: 35.5},
+  {temp: 36.8},
+  {temp: 33.9},
+  {temp: 39.2},
+  {temp: 34.7}
+];
+
+function load(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+let hives = load("ci_hives", defaultHives);
+let inspections = load("ci_inspections", []);
+
+function persist() {
+  localStorage.setItem("ci_hives", JSON.stringify(hives));
+  localStorage.setItem("ci_inspections", JSON.stringify(inspections));
+}
+
+// Classificação da temperatura
+function getStatus(temp) {
+  if (temp <= 35) {
+    return {
+      name: "Tudo OK",
+      color: "green",
+      level: "Verde"
+    };
+  }
+
+  if (temp <= 38) {
+    return {
+      name: "Atenção",
+      color: "yellow",
+      level: "Amarelo"
+    };
+  }
+
+  return {
+    name: "Urgente",
+    color: "red",
+    level: "Vermelho"
+  };
+}
+
+// Renderização das colmeias
+function renderHives() {
+  const container = document.getElementById("hives");
+  container.innerHTML = "";
+
+  hives.forEach((hive, index) => {
+    const status = getStatus(Number(hive.temp));
+
+    container.innerHTML += `
+      <div class="hive ${status.color}">
+        <h3>🐝 Colmeia ${String(index + 1).padStart(2,"0")}</h3>
+
+        <span class="status ${status.color}">
+          <span class="light ${status.color}"></span>
+          ${status.name}
+        </span>
+
+        <div class="temperature">
+          ${Number(hive.temp).toFixed(1)} °C
+        </div>
+
+        <p>Indicador: ${status.level}</p>
+
+        <p>
+          ${status.color === "green"
+            ? "Temperatura dentro da faixa configurada."
+            : status.color === "yellow"
+            ? "Acompanhar a temperatura de perto."
+            : "Priorizar avaliação da colmeia."}
+        </p>
+
+        <button class="secondary"
+          onclick="selectHive(${index})">
+          Simular
+        </button>
+
+        <button class="secondary"
+          onclick="inspectHive(${index})">
+          Inspecionar
+        </button>
+      </div>
+    `;
+  });
+
+  updateStats();
+}
+
+// Atualizar indicadores gerais
+function updateStats() {
+  const average = hives.reduce(
+    (sum, hive) => sum + Number(hive.temp), 0
+  ) / hives.length;
+
+  const alerts = hives.filter(
+    hive => Number(hive.temp) > 35
+  ).length;
+
+  const totalHoney = inspections.reduce(
+    (sum, item) => sum + Number(item.honey), 0
+  );
+
+  document.getElementById("totalHives").textContent = hives.length;
+  document.getElementById("average").textContent =
+    average.toFixed(1) + " °C";
+
+  document.getElementById("alerts").textContent = alerts;
+  document.getElementById("totalHoney").textContent =
+    totalHoney.toFixed(1) + " L";
+}
+
+// Simulação manual de temperatura
+function selectHive(index) {
+  document.getElementById("simHive").value = index;
+  document.getElementById("simTemp").value = hives[index].temp;
+  document.getElementById("simTemp").focus();
+}
+
+function simulateTemperature() {
+  const index = Number(document.getElementById("simHive").value);
+  const temp = Number(document.getElementById("simTemp").value);
+
+  if (!Number.isFinite(temp) || temp < 0 || temp > 80) {
+    alert("Digite uma temperatura válida entre 0 e 80 °C.");
+    return;
+  }
+
+  hives[index].temp = temp;
+  persist();
+  renderHives();
+
+  alert(
+    "Temperatura atualizada!\n" +
+    "Colmeia " + String(index + 1).padStart(2, "0") +
+    ": " + temp.toFixed(1) + " °C\n" +
+    "Status: " + getStatus(temp).name
+  );
+}
+
+// Abrir formulário para inspeção de uma colmeia
+function inspectHive(index) {
+  document.getElementById("hiveSelect").value = index;
+  document.getElementById("realTemp").value = hives[index].temp;
+  document.getElementById("inspection").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+// Data e hora atuais no formulário
+function setCurrentDate() {
+  const now = new Date();
+  const local = new Date(
+    now.getTime() - now.getTimezoneOffset() * 60000
+  );
+
+  document.getElementById("inspectionDate").value =
+    local.toISOString().slice(0, 16);
+}
+
+// Salvar inspeção real
+document.getElementById("inspectionForm")
+.addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  const index = Number(document.getElementById("hiveSelect").value);
+  const temp = Number(document.getElementById("realTemp").value);
+  const honey = Number(document.getElementById("honey").value);
+  const date = document.getElementById("inspectionDate").value;
+
+  if (
+    !Number.isInteger(index) || index < 0 || index >= hives.length ||
+    !Number.isFinite(temp) || temp < 0 || temp > 80 ||
+    !Number.isFinite(honey) || honey < 0 || !date
+  ) {
+    alert("Verifique os dados informados.");
+    return;
+  }
+
+  const inspection = {
+    id: Date.now() + "-" + Math.random().toString(36).slice(2),
+    hive: index,
+    date: date,
+    temp: temp,
+    status: getStatus(temp).name,
+    color: getStatus(temp).color,
+    condition: document.getElementById("condition").value,
+    honey: honey,
+    observations: document.getElementById("observations").value
+  };
+
+  inspections.push(inspection);
+
+  // A temperatura da última inspeção atualiza o painel
+  hives[index].temp = temp;
+
+  persist();
+  renderHives();
+  renderHistory();
+  renderAnalysis();
+
+  this.reset();
+  setCurrentDate();
+
+  alert("Inspeção registrada com sucesso!");
+});
+
+// Mostrar histórico
+function renderHistory() {
+  const tbody = document.getElementById("history");
+  const empty = document.getElementById("emptyHistory");
+
+  tbody.innerHTML = "";
+
+  const ordered = [...inspections].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+
+  empty.style.display = ordered.length ? "none" : "block";
+
+  ordered.forEach(item => {
+    const date = new Date(item.date).toLocaleString("pt-BR");
+
+    const tr = document.createElement("tr");
+
+    const values = [
+      "Colmeia " + String(item.hive + 1).padStart(2, "0"),
+      date,
+      Number(item.temp).toFixed(1) + " °C",
+      item.status,
+      item.condition,
+      Number(item.honey).toFixed(1) + " L",
+      item.observations || "Sem observações"
+    ];
+
+    values.forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+
+    const action = document.createElement("td");
+    const button = document.createElement("button");
+    button.className = "danger-btn";
+    button.textContent = "Excluir";
+    button.addEventListener("click", () => deleteInspection(item.id));
+
+    action.appendChild(button);
+    tr.appendChild(action);
+    tbody.appendChild(tr);
+  });
+}
+
+// Excluir registro
+function deleteInspection(id) {
+  if (!confirm("Deseja excluir esta inspeção?")) return;
+
+  inspections = inspections.filter(item => item.id !== id);
+
+  // Não altera a temperatura atual da colmeia.
+  persist();
+  renderHistory();
+  renderAnalysis();
+  updateStats();
+}
+
+// Análise dos registros
+function renderAnalysis() {
+  const box = document.getElementById("analysis");
+
+  if (!inspections.length) {
+    box.textContent =
+      "Ainda não existem inspeções suficientes para gerar uma análise.";
+    return;
+  }
+
+  const totalHoney = inspections.reduce(
+    (sum, item) => sum + Number(item.honey), 0
+  );
+
+  const urgent = inspections.filter(
+    item => item.color === "red"
+  ).length;
+
+  const attention = inspections.filter(
+    item => item.color === "yellow"
+  ).length;
+
+  let html = `
+    <p><strong>Inspeções registradas:</strong> ${inspections.length}</p>
+    <p><strong>Produção total registrada:</strong> ${totalHoney.toFixed(1)} litros</p>
+    <p><strong>Registros com atenção:</strong> ${attention}</p>
+    <p><strong>Registros urgentes:</strong> ${urgent}</p>
+    <br>
+    <strong>Resumo por colmeia:</strong>
+  `;
+
+  hives.forEach((hive, index) => {
+    const records = inspections.filter(item => item.hive === index);
+
+    const production = records.reduce(
+      (sum, item) => sum + Number(item.honey), 0
+    );
+
+    const last = records.length
+      ? new Date(
+          records.reduce((a, b) =>
+            new Date(a.date) > new Date(b.date) ? a : b
+          ).date
+        ).toLocaleDateString("pt-BR")
+      : "Sem inspeção";
+
+    html += `
+      <p>
+        <strong>Colmeia ${String(index + 1).padStart(2,"0")}:</strong>
+        ${records.length} inspeção(ões) |
+        ${production.toFixed(1)} L de mel |
+        Última revisão: ${last}
+      </p>
+    `;
+  });
+
+  html += `
+    <br>
+    <p>
+      <strong>Recomendação:</strong>
+      ${urgent > 0
+        ? "Existem registros de temperatura acima de 38 °C. Priorize a avaliação dessas colmeias."
+        : attention > 0
+        ? "Existem registros de atenção. Continue acompanhando as temperaturas."
+        : "Os registros de inspeção não apresentam temperaturas acima de 35 °C."}
+    </p>
+    <p style="margin-top:10px;font-size:12px">
+      Análise baseada nos registros cadastrados. Não substitui
+      a avaliação técnica do apicultor.
+    </p>
+  `;
+
+  box.innerHTML = html;
+}
+
+// Inicialização
+setCurrentDate();
+renderHives();
+renderHistory();
+renderAnalysis();
+
+</script>
+
+</body>
+</html>
